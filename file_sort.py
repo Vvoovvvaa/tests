@@ -15,7 +15,7 @@ FILE_TYPES = {
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Organize files into categories.')
-    parser.add_argument('directory', help='Path to the directory with files.')
+    parser.add_argument('directory', help='C:\Users\HP-PC\OneDrive\Desktop\PADDC')
     return parser.parse_args()
 
 def create_folder(folder_name):
@@ -46,7 +46,7 @@ def organize_files():
                 break
 
         if not sorted_flag:
-            misc_folder = create_folder('miscellaneous')
+            misc_folder = create_folder('my_projects')
             move_file_to_folder(item_path, misc_folder)
 
 def main():

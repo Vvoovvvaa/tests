@@ -13,6 +13,11 @@ FILE_TYPES = {
     'compressed': ['.zip', '.tar', '.tar.gz', '.rar', '.7z'],
 }
 
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Organize files into categories.')
+    parser.add_argument('directory', help='Path to the directory with files.')
+    return parser.parse_args()
+
 def create_folder(folder_name):
     directory_path = os.path.join(directory, folder_name)
     if not os.path.exists(directory_path):
@@ -45,11 +50,8 @@ def organize_files():
             move_file_to_folder(item_path, misc_folder)
 
 def main():
-    parser = argparse.ArgumentParser(description='Organize files into categories.')
-    parser.add_argument('directory', help='Path to the directory with files.')
-    args = parser.parse_args()
-
     global directory
+    args = parse_arguments()
     directory = args.directory
 
     if not os.path.isdir(directory):

@@ -3,7 +3,7 @@ import requests
 
 def fetch_random_words(count=10):
     try:
-        response = requests.get(f"https://www.thegamegal.com/word-generator/{count}")
+        response = requests.get(f"https://random-word-api.herokuapp.com/word?number={count}")
         if response.status_code == 200:
             return response.json()
         else:

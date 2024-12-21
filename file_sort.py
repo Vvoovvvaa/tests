@@ -15,7 +15,7 @@ FILE_TYPES = {
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Organize files into categories.')
-    parser.add_argument('directory', help='C:\Users\HP-PC\OneDrive\Desktop\PADDC')
+    parser.add_argument('directory', help='Path to the directory with files.')
     return parser.parse_args()
 
 def create_folder(folder_name):

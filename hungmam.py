@@ -15,10 +15,10 @@ def fetch_random_words(count=10):
 def barer(words):
     return random.choice(words)
 
-def start_game(word, guessed):
+def logik_words(word, guessed):
     return ''.join([letter if letter in guessed else '_' for letter in word])
 
-def marduk(mistakes):
+def get_picture(mistakes):
     stages = [
         ''' 
          ------
@@ -102,8 +102,8 @@ def hangman(name, words):
     print(f"Welcome to the Hangman game, {name}!")
 
     while mistakes < max_mistakes:
-        marduk(mistakes)
-        print(f"\nWord: {start_game(word, guessed)}")
+        get_picture(mistakes)
+        print(f"\nWord: {logik_words(word, guessed)}")
         guess = input("Enter a letter: ").lower()
 
         if len(guess) != 1 or not guess.isalpha():
@@ -122,12 +122,12 @@ def hangman(name, words):
             mistakes += 1
             print(f"Incorrect! '{guess}' is not in the word.")
 
-        if start_game(word, guessed) == word:
+        if logik_words(word, guessed) == word:
             print(f"\nCongratulations! You guessed the word: {word}")
             break
 
     if mistakes == max_mistakes:
-        marduk(mistakes)
+        get_picture(mistakes)
         print(f"\nYou lose! The word was: {word}")
 
 def main():

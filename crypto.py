@@ -50,7 +50,7 @@ def main():
     while True:
         name_filter = input("Фильтр по имени (оставьте пустым для пропуска): ")
         price_filter = input("Фильтр по минимальной цене (оставьте пустым для пропуска): ")
-        price_filter = float(price_filter) if price_filter.isdigit() else None
+       # price_filter = float(price_filter) if price_filter.isdigit() else None
 
         data = get_crypto_data(name_filter, price_filter)
         display_data(data)

@@ -12,37 +12,42 @@ def get_news(api_key, keyword=None, topic=None):
     if topic:
         params['category'] = topic
 
-    response = requests.get(url, params=params)
-
-    if response.status_code == 200:
-        news_list = response.json().get('articles', [])
-        return news_list if news_list else None
-    else:
-        print(f"Error: {response.status_code}")
-        print(response.text)
-        return None
-
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        data = response.json()
+        return data.get('articles', [])
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching news: {e}")
+        return []
+    except ValueError:
+        print("Error: Could not decode the response JSON.")
+        return []
 
 def save_news(news, file_name="news.txt"):
-    with open(file_name, 'w', encoding='utf-8') as file:
-        for i, article in enumerate(news, 1):
-            file.write(f"News {i}:\n")
-            file.write(f"Title: {article.get('title', 'No Title')}\n")
-            file.write(f"Source: {article['source']['name']}\n")
-            file.write(f"Published: {article.get('publishedAt', 'Unknown')}\n")
-            file.write(f"Link: {article.get('url', 'No URL')}\n")
-            file.write('-' * 50 + '\n')
-    print(f"News saved in {file_name}")
-
+    try:
+        with open(file_name, 'w', encoding='utf-8') as file:
+            for i, article in enumerate(news, 1):
+                file.write(f"News {i}:\n")
+                file.write(f"Title: {article.get('title', 'No Title')}\n")
+                file.write(f"Source: {article.get('source', {}).get('name', 'Unknown Source')}\n")
+                file.write(f"Published: {article.get('publishedAt', 'Unknown')}\n")
+                file.write(f"Link: {article.get('url', 'No URL')}\n")
+                file.write('-' * 50 + '\n')
+        print(f"News saved in {file_name}")
+    except IOError as e:
+        print(f"Error saving news to file: {e}")
 
 def show_news(news):
+    if not news:
+        print("No news articles to display.")
+        return
     for i, article in enumerate(news, 1):
         print(f"{i}. {article.get('title', 'No Title')}")
-        print(f"Source: {article['source']['name']}")
+        print(f"Source: {article.get('source', {}).get('name', 'Unknown Source')}")
         print(f"Published: {article.get('publishedAt', 'Unknown')}")
         print(f"Link: {article.get('url', 'No URL')}")
         print('-' * 50)
-
 
 def main():
     api_key = '697bb948b4064c378281c09703225d14'
@@ -64,4 +69,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

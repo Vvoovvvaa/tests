@@ -16,8 +16,6 @@ def get_weather(city, option=None):
         print(f"Скорость ветра: {data['wind']['speed']}")
         print(f"Описание: {data['weather'][0]['description']}")
         
-    
-       
         if option:
             if option == "":
                   option = None

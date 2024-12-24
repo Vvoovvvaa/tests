@@ -1,71 +1,45 @@
 import requests
 
-def get_news(api_key, keyword=None, topic=None):
-    url = 'https://newsapi.org/v2/top-headlines'
-    params = {
-        'apiKey': api_key,
-        'language': 'en',
-        'pageSize': 5,
-    }
-    if keyword:
-        params['q'] = keyword
-    if topic:
-        params['category'] = topic
-
+def get_news(api_key, keyword):
+    url = f'https://newsapi.org/v2/everything?q={keyword}&apiKey={api_key}'
     try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        return data.get('articles', [])
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching news: {e}")
-        return []
-    except ValueError:
-        print("Error: Could not decode the response JSON.")
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            return data['articles']
+        else:
+            print("Ошибка при получении новостей.")
+            return []
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
         return []
 
-def save_news(news, file_name="news.txt"):
-    try:
-        with open(file_name, 'w', encoding='utf-8') as file:
-            for i, article in enumerate(news, 1):
-                file.write(f"News {i}:\n")
-                file.write(f"Title: {article.get('title', 'No Title')}\n")
-                file.write(f"Source: {article.get('source', {}).get('name', 'Unknown Source')}\n")
-                file.write(f"Published: {article.get('publishedAt', 'Unknown')}\n")
-                file.write(f"Link: {article.get('url', 'No URL')}\n")
-                file.write('-' * 50 + '\n')
-        print(f"News saved in {file_name}")
-    except IOError as e:
-        print(f"Error saving news to file: {e}")
-
-def show_news(news):
-    if not news:
-        print("No news articles to display.")
-        return
-    for i, article in enumerate(news, 1):
-        print(f"{i}. {article.get('title', 'No Title')}")
-        print(f"Source: {article.get('source', {}).get('name', 'Unknown Source')}")
-        print(f"Published: {article.get('publishedAt', 'Unknown')}")
-        print(f"Link: {article.get('url', 'No URL')}")
-        print('-' * 50)
+def save_news(news):
+    with open("news.txt", "w", encoding="utf-8") as file:
+        for article in news:
+            title = article.get('title', 'Без заголовка')
+            url = article.get('url', 'Без ссылки')
+            file.write(f"Заголовок: {title}\nСсылка: {url}\n\n")
+    print("Новости сохранены в файл news.txt")
 
 def main():
-    api_key = '697bb948b4064c378281c09703225d14'
-    keyword = input("Enter a keyword to search for (or leave empty): ").strip()
-    topic = input("Enter a topic (like sports, business) (or leave empty): ").strip()
+    api_key = "697bb948b4064c378281c09703225d14"  
+    keyword = input("Введите ключевое слово для поиска новостей: ")
 
-    if not keyword and not topic:
-        print("You need to enter at least a keyword or a topic!")
+    if not keyword:
+        print("Вы не ввели ключевое слово.")
         return
 
-    news = get_news(api_key, keyword, topic)
+    news = get_news(api_key, keyword)
 
     if news:
-        print("Here are the latest news articles:\n")
-        show_news(news)
+        print("\nПоследние новости:")
+        for article in news:
+            print(f"Заголовок: {article.get('title', 'Без заголовка')}")
+            print(f"Ссылка: {article.get('url', 'Без ссылки')}\n")
         save_news(news)
     else:
-        print("No news found. Try a different keyword or topic.")
+        print("Новостей по вашему запросу не найдено.")
 
 if __name__ == "__main__":
     main()

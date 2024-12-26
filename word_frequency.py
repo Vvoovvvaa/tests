@@ -26,5 +26,9 @@ def count_words(file_path, top_n=5):
     except Exception as e:
         print(f"Произошла ошибка: {e}")
 
-file_path = input("Введите путь к текстовому файлу: ").strip()
-count_words(file_path, top_n=5)
+def main():
+    file_path = input("Введите путь к текстовому файлу: ").strip()
+    count_words(file_path, top_n=5)
+
+if __name__=="__main__":
+    main()

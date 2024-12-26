@@ -44,7 +44,6 @@ def display_data(data):
         print(f"Имя: {coin['name']}, Символ: {coin['symbol']}")
         print(f"Цена: ${coin['price']}, Рыночная капитализация: ${coin['market_cap']}")
         print(f"Объём: ${coin['volume']}, Изменение за 24ч: {coin['change']}%")
-        print("-" * 30)
 
 def main():
     while True:

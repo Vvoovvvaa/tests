@@ -97,6 +97,9 @@ def hangman():
         get_picture(mistakes)
         print("\nWord:", ''.join([letter if letter in guessed else '_' for letter in word]))
         guess = input("Enter a letter: ").lower()
+        if len(guess) != 1 or not guess.isalpha():
+            print("Please enter exactly one letter.")
+            continue
         if guess in guessed:
             print(f"You've already guessed '{guess}'.")
             continue
@@ -120,3 +123,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
